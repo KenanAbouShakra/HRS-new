@@ -22,8 +22,14 @@
                     <td>@booking.Customer.CustomerId</td>
                     <td>@booking.Customer.Name</td>
                     <td>@booking.BookingDate</td>
-                    <td>@booking.StartDate</td>
-                    <td>@booking.EndDate</td>
+                    @{
+                        DateTime startDate = (DateTime)booking.StartDate;
+                        string formattedStartDate = startDate.ToShortDateString();
+                        DateTime endDate = (DateTime)booking.EndDate;
+                        string formattedEndDate = endDate.ToShortDateString();
+                    }
+                    <td>@formattedStartDate</td>
+                    <td>@formattedEndDate</td>
                     <td>
                         <p>
                             <a class="btn btn-outline-danger" asp-route-id="@booking.BookingId"

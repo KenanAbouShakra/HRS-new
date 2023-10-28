@@ -111,7 +111,7 @@ namespace HouseRenting.Controllers
                     DateTime startDate = (DateTime)booking.StartDate;
                     string formattedStartDate = startDate.ToShortDateString();
                     DateTime endDate = (DateTime)booking.EndDate;
-                    string formattedEndDate = startDate.ToShortDateString();
+                    string formattedEndDate = endDate.ToShortDateString();
 
                     // Table message
                     string tableHtml = $"<table class=\"table table-striped\">" +
@@ -122,7 +122,7 @@ namespace HouseRenting.Controllers
                     TempData["BookingTable"] = tableHtml;
 
                     // Confirmation message without the table
-                    string confirmationMessage = $"We confirm that the house number {booking.ItemId} are booked to {booking.Customer.Name} in the date:{booking.BookingDate} in the period[{formattedStartDate} ,{formattedEndDate} ]!";
+                    string confirmationMessage = $"We confirm that the house number {booking.ItemId} are booked to {booking.Customer.Name} in the date:{booking.BookingDate} in the period[{formattedStartDate} ,{formattedEndDate}]!";
 
                     TempData["BookingConfirmation"] = confirmationMessage;
 
