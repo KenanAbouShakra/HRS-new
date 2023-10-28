@@ -32,8 +32,11 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Update" asp-route-id="@item.ItemId" class="btn btn-outline-success">Update</a>
-                    <a asp-action="Delete" asp-route-id="@item.ItemId" class="btn btn-outline-danger">Delete</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Update" asp-route-id="@item.ItemId" class="btn btn-outline-success">Update</a>
+                        <a asp-action="Delete" asp-route-id="@item.ItemId" class="btn btn-outline-danger">Delete</a>
+                    }
                 </td>
             </tr>
         }

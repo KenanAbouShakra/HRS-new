@@ -32,6 +32,7 @@ namespace HouseRenting.Controllers
                 .ToListAsync();
             return View(bookings);
         }
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> AllBookingsTable()
         {
             //string loggedInUserEmail = User.Identity.Name;

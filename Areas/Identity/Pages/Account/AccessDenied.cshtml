@@ -1,7 +1,16 @@
 ﻿@page
 @model AccessDeniedModel
+
 @{
+
     ViewData["Title"] = "Access denied";
+}
+@{
+    <script>
+        window.onload = function () {
+            alert('You do not have access to this resource.');
+        };
+    </script>
 }
 
 <header>

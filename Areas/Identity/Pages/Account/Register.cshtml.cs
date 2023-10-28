@@ -120,6 +120,17 @@ namespace HouseRenting.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    var createdUser = await _userManager.FindByEmailAsync(Input.Email);
+
+                    
+                    if (createdUser != null && createdUser.Email == "admin@hrs.com")
+                    {
+                        await _userManager.AddToRoleAsync(createdUser, "Admin");
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(createdUser, "user");
+                    }
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

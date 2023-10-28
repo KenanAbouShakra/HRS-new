@@ -60,8 +60,11 @@
                         <ul>
                             <li><a href="/Booking/Table">My Bookings</a></li>
                             <li><a href="/Customer/Table">My Info</a></li>
-                            <li><a asp-action="AllCustomersTable" asp-controller="Customer">All Customers</a></li>
-                            <li><a asp-action="AllBookingsTable" asp-controller="Booking">All Bookings</a></li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li><a asp-action="AllCustomersTable" asp-controller="Customer">All Customers</a></li>
+                                <li><a asp-action="AllBookingsTable" asp-controller="Booking">All Bookings</a></li>
+                            }
                             <li><a href="#about">About Us</a></li>
                             <li><a href="#contact">Contact Us</a></li>
 
@@ -97,8 +100,8 @@
         </div>
     </section><!-- End Hero -->
 
-    <main id="main" style=" margin: 15px; padding:15px">
-        <div class="container ">
+    <main id="main" >
+        <div class="container " style=" margin: 15px; padding:15px">
 
         @RenderBody()
         @RenderSection("Scripts", required: false)

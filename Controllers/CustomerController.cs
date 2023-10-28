@@ -34,7 +34,7 @@ namespace HouseRenting.Controllers
             return View(customers);
         }
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AllCustomersTable()
         {
             //string loggedInUserEmail = User.Identity.Name;
@@ -68,7 +68,7 @@ namespace HouseRenting.Controllers
             return RedirectToAction(nameof(Table));
         }
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAllCustomers()
         {
             var customers = await _customerRepository.GetAll();

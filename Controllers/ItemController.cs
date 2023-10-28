@@ -72,7 +72,7 @@ namespace HouseRenting.Controllers
             return View(item);
         }
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id)
         {
             var item = await _itemRepository.GetItemById(id);
@@ -97,7 +97,7 @@ namespace HouseRenting.Controllers
             return View(item);
         }
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _itemRepository.GetItemById(id);
