@@ -7,7 +7,7 @@ namespace HouseRenting.DAL
     {
   
         Task<bool> CreateBookingItem(Booking booking, int itemId);
-        Task<Booking?> GetBookingById (int id);
+        Task<List<Booking?>> GetBookingById (int id);
         Task<bool> Delete(int id);
         
 

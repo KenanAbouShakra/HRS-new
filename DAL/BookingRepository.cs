@@ -28,16 +28,16 @@ namespace HouseRenting.DAL
             }
 
         }
-        public async Task<Booking?> GetBookingById(int id)
+        public async Task<List<Booking?>> GetBookingById(int itemId)
         {
             try
             {
-                return await _db.Bookings.FindAsync(id);
+                return await _db.Bookings.Where(b => b.ItemId == itemId).ToListAsync();
             }
             catch (Exception e)
             {
-                _logger.LogError("[BookingRepository] Booking FindAsync(bookingId) failed when GetBookingById for BookingId {BookingId:0000}, error message: {e}", id, e.Message);
-                return null;
+                _logger.LogError("[BookingRepository] GetBookingsByItem failed, error message: {e}", e.Message);
+                return new List<Booking>();
             }
         }
 

@@ -86,6 +86,20 @@ namespace HouseRenting.Controllers
 
             if (ModelState.IsValid)
             {
+                // Check if booking period overlaps with existing bookings
+                if (await BookingPeriodOverlaps(booking))
+                {
+                    ModelState.AddModelError("Booking.StartDate", "The selected date range overlaps with an existing booking.");
+                    return View("CreateBookingItem", viewModel);
+                }
+
+                // Check if EndDate is not less than StartDate
+                if (booking.EndDate < booking.StartDate)
+                {
+                    ModelState.AddModelError("Booking.EndDate", "End date cannot be earlier than start date.");
+                    return View("CreateBookingItem", viewModel);
+                }
+
                 // Check if booking was created successfully
                 bool isBookingCreated = await _bookingRepository.CreateBookingItem(booking, itemId);
 
@@ -94,16 +108,21 @@ namespace HouseRenting.Controllers
                     booking.Items.IsBooked = true;
 
                     await _itemDbContext.SaveChangesAsync();
+                    DateTime startDate = (DateTime)booking.StartDate;
+                    string formattedStartDate = startDate.ToShortDateString();
+                    DateTime endDate = (DateTime)booking.EndDate;
+                    string formattedEndDate = startDate.ToShortDateString();
+
                     // Table message
                     string tableHtml = $"<table class=\"table table-striped\">" +
-                        $"<tr><th>House number</th><th>Customer Name</th><th>Booking Date</th></tr>" +
-                        $"<tr><td>{booking.ItemId}</td><td>{booking.Customer.Name}</td><td>{booking.BookingDate}</td></tr>" +
+                        $"<tr><th>House number</th><th>Customer Name</th><th>Booking Date</th><th>Start reservation Date</th><th>End reservation Date</th></tr>" +
+                        $"<tr><td>{booking.ItemId}</td><td>{booking.Customer.Name}</td><td>{booking.BookingDate}</td><td>{formattedStartDate}</td><td>{formattedEndDate}</td></tr>" +
                         $"</table>";
 
                     TempData["BookingTable"] = tableHtml;
 
                     // Confirmation message without the table
-                    string confirmationMessage = $"We confirm that Huset nummer {booking.ItemId} er booket av {booking.Customer.Name} in the date:{booking.BookingDate}!";
+                    string confirmationMessage = $"We confirm that the house number {booking.ItemId} are booked to {booking.Customer.Name} in the date:{booking.BookingDate} in the period[{formattedStartDate} ,{formattedEndDate} ]!";
 
                     TempData["BookingConfirmation"] = confirmationMessage;
 
@@ -115,10 +134,30 @@ namespace HouseRenting.Controllers
             // If there are validation errors or booking creation failed, set ModelState for ItemId and return to the same view with the validation errors
             _logger.LogWarning("[BookingController] Booking creation failed", booking);
 
-          
-
             return View("CreateBookingItem", viewModel);
         }
+
+        private async Task<bool> BookingPeriodOverlaps(Booking newBooking)
+        {
+            // Get existing bookings for the same item
+            var existingBookings = await _bookingRepository.GetBookingById(newBooking.ItemId);
+
+            // Check for date overlap
+
+
+            foreach (var b in existingBookings)
+            {
+                if (newBooking.StartDate < b.EndDate && newBooking.EndDate > b.StartDate)
+                {
+                    // Overlap found
+                    return true;
+                }
+            }
+
+            // No overlap
+            return false;
+        }
+
 
         [HttpGet]
         [Authorize]

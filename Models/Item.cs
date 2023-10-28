@@ -22,7 +22,7 @@ namespace HouseRenting.Models
 
         public bool IsBooked { get; set; } = false;
         public virtual List<Image>? Images { get; set; }
-        public virtual Booking? Bookings { get; set; }
+        public virtual List<Booking>? Bookings { get; set; }
 
 
     }
