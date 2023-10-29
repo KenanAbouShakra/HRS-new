@@ -1,3 +1,4 @@
+using HouseRenting.Models;
 using HouseRenting.DAL;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -47,7 +48,7 @@ builder.Logging.AddSerilog(logger);
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-    options.LoginPath = "/Identity/Account/AccessDenied";
+    options.LoginPath = "/Identity/Account/Login";
 });
 
 var app = builder.Build();
