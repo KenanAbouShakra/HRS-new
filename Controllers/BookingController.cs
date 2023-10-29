@@ -157,6 +157,33 @@ namespace HouseRenting.Controllers
             // No overlap
             return false;
         }
+        [HttpGet]
+        public async Task<IActionResult> BookingPeriods(int itemId)
+        {
+            var existingBookings = await _bookingRepository.GetBookingById(itemId);
+            if (existingBookings != null)
+            {
+                string periods = $"This House is not available in the periods:\n";
+                foreach (var b in existingBookings)
+                {
+                    if (DateTime.Now < b.EndDate)
+                    {
+                        await _itemDbContext.SaveChangesAsync();
+                        DateTime startDate = (DateTime)b.StartDate;
+                        string formattedStartDate = startDate.ToShortDateString();
+                        DateTime endDate = (DateTime)b.EndDate;
+                        string formattedEndDate = endDate.ToShortDateString();
+                        periods += $"[{formattedStartDate}, {formattedEndDate}]\n";
+                    }
+                }
+
+                return Content(periods, "text/plain");
+            }
+
+            return Content(null, "text/plain");
+        }
+
+
 
 
         [HttpGet]

@@ -1,11 +1,11 @@
 ﻿@model Item
 <h2>Update this House</h2>
 <div asp-validation-summary="All" class="text-danger"></div>
-<form asp-action="Update">
+<form asp-action="Update" class="col-md-7 col-lg-5 offset-md-3 offset-lg-4">
     <input type="hidden" asp-for="ItemId"/>
     <div class="form-group">
-        <label asp-for="Category">Category</label> <span class="text-bg-danger">*</span>
-        <select asp-for="Category" class="form-control">
+        <label asp-for="Category">Category</label> <span class="text-bg-danger"></span>
+        <select asp-for="Category" class="form-control bg-light">
             <option value="House">House</option>
             <option value="Dorm">Dorm</option>
             <option value="Apartment">Apartment</option>
@@ -18,35 +18,36 @@
     </div>
 
     <div class=" form-group">
-        <lable asp-for="Location">Location</lable> <span class="text-bg-danger">*</span>
-        <input asp-for="Location" class="form-control" />
+        <lable asp-for="Location">Location</lable> <span class="text-bg-danger"></span>
+        <input asp-for="Location" class="form-control bg-light" />
         <span asp-validation-for="Location" class="text-danger"></span>
     </div>
     <div class=" form-group">
-        <lable asp-for="Rooms">Rooms</lable> <span class="text-bg-danger">*</span>
-        <input asp-for="Rooms" class="form-control" />
+        <lable asp-for="Rooms">Rooms</lable> <span class="text-bg-danger"></span>
+        <input asp-for="Rooms" class="form-control bg-light" />
         <span asp-validation-for="Rooms" class="text-danger"></span>
     </div>
     <div class=" form-group">
-        <lable asp-for="Area">Area</lable> <span class="text-bg-danger">*</span>
-        <input asp-for="Area" class="form-control" />
+        <lable asp-for="Area">Area</lable> <span class="text-bg-danger"></span>
+        <input asp-for="Area" class="form-control bg-light" />
         <span asp-validation-for="Area" class="text-danger"></span>
     </div>
     <div class=" form-group">
-        <lable asp-for="Renting">Renting</lable> <span class="text-bg-danger">*</span>
-        <input asp-for="Renting" class="form-control" />
+        <lable asp-for="Renting">Renting</lable> <span class="text-bg-danger"></span>
+        <input asp-for="Renting" class="form-control bg-light" />
         <span asp-validation-for="Renting" class="text-danger"></span>
     </div>
     <div class=" form-group">
-        <lable asp-for="Description">Description</lable> <span class="text-bg-danger">*</span>
-        <input asp-for="Description" class="form-control" />
+        <lable asp-for="Description">Description</lable> <span class="text-bg-danger"></span>
+        <input asp-for="Description" class="form-control bg-light" />
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <div class=" form-group">
-        <lable asp-for="ImageUrl">ImageUrl</lable> <span class="text-bg-danger">*</span>
-        <input asp-for="ImageUrl" class="form-control" />
+        <lable asp-for="ImageUrl">ImageUrl</lable> <span class="text-bg-danger"></span>
+        <input asp-for="ImageUrl" class="form-control bg-light" />
         <span asp-validation-for="ImageUrl" class="text-danger"></span>
     </div>
+    </br>
     <button type="submit" class="btn btn-outline-primary">Save</button>
     <a asp-action="Table" class="btn btn-outline-warning">Cancel</a>
 </form>

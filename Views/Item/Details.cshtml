@@ -28,17 +28,42 @@
   
 </form>
 
-<div class="col-3">
+<div>
     @if (Model.IsBooked==true)
         {
-        <a class="btn btn-warning" 
+        <div class="col-3">
+        <a class=" btn btn-primary"
            asp-controller="Booking" asp-route-itemId="@Model.ItemId"
-           asp-action="CreateBookingItem">Booking</a>
+           asp-action="CreateBookingItem">New Booking</a>
+           </div><br />
+        <script>
+            async function updateBookingPeriods() {
+                var itemId = @Html.Raw(Json.Serialize(Model.ItemId));
+                // AJAX request to the server
+                var response = await fetch(`/Booking/BookingPeriods?itemId=${itemId}`);
+
+                if (response.ok) {
+                    var bookingPeriods = await response.text();
+                    document.getElementById('bookingPeriods').innerText = bookingPeriods;
+                } else {
+                    console.error('Failed to fetch booking periods');
+                }
+            }
+            // Call the function on page load
+            document.addEventListener('DOMContentLoaded', function () {
+                updateBookingPeriods();
+            });
+        </script>
+        <p class="text-danger">@($"{'\u26A0'}")</p>
+        <div class="bg-light text-primary d-block" id="bookingPeriods"></div>
+
     }
     else
     {
-        <a class="btn btn-outline-primary"
+        <div class="col-3">
+        <a class="col-3 btn btn-primary"
            asp-controller="Booking" asp-route-itemId="@Model.ItemId"
            asp-action="CreateBookingItem">Booking</a>
+         </div>
     }
 </div>
