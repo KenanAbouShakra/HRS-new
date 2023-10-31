@@ -46,19 +46,16 @@ namespace HouseRenting.Controllers
         [Authorize]
         public IActionResult CreateBookingItem(int itemId)
         {
-            // Fetch the Item using the itemId
             var item = _itemDbContext.Items.FirstOrDefault(i => i.ItemId == itemId);
 
             if (item == null)
             {
-                // Handle the case where the item is not found, maybe return a 404 or redirect
                 return NotFound();
             }
 
-            // Create a new Booking object and set its ItemId
             Booking booking = new Booking { ItemId = itemId };
 
-            // Create the view model
+            
             var viewModel = new CreateBookingViewModel
             {
                 Item = item,
@@ -140,7 +137,7 @@ namespace HouseRenting.Controllers
         private async Task<bool> BookingPeriodOverlaps(Booking newBooking)
         {
             // Get existing bookings for the same item
-            var existingBookings = await _bookingRepository.GetBookingById(newBooking.ItemId);
+            var existingBookings = await _bookingRepository.GetBookingByItemId(newBooking.ItemId);
 
             // Check for date overlap
 
@@ -160,7 +157,7 @@ namespace HouseRenting.Controllers
         [HttpGet]
         public async Task<IActionResult> BookingPeriods(int itemId)
         {
-            var existingBookings = await _bookingRepository.GetBookingById(itemId);
+            var existingBookings = await _bookingRepository.GetBookingByItemId(itemId);
             if (existingBookings != null)
             {
                 string periods = $"This House is not available in the periods:\n";
@@ -188,7 +185,7 @@ namespace HouseRenting.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteBooking(int id)
         {
             var booking = await _bookingRepository.GetBookingById(id);
             if (booking == null)
@@ -199,9 +196,9 @@ namespace HouseRenting.Controllers
             return View(booking);
         }
         [HttpPost]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteBookingConfirmed(int id)
         {
-            bool Ok = await _bookingRepository.Delete(id);
+            bool Ok = await _bookingRepository.DeleteBooking(id);
             if (!Ok)
             {
                 _logger.LogError("[BookingController] Booking deletion failed for the  BookingId { BookingId:0000}", id);

@@ -28,7 +28,19 @@ namespace HouseRenting.DAL
             }
 
         }
-        public async Task<List<Booking?>> GetBookingById(int itemId)
+        public async Task<Booking?> GetBookingById(int bookingId)
+        {
+            try
+            {
+                return await _db.Bookings.FindAsync( bookingId);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("[BookingRepository] GetBookingById failed, error message: {e}", e.Message);
+                return null; 
+            }
+        }
+        public async Task<List<Booking?>> GetBookingByItemId(int itemId)
         {
             try
             {
@@ -36,25 +48,30 @@ namespace HouseRenting.DAL
             }
             catch (Exception e)
             {
-                _logger.LogError("[BookingRepository] GetBookingsByItem failed, error message: {e}", e.Message);
-                return new List<Booking>();
+                _logger.LogError("[BookingRepository] GetBookingByItemId failed, error message: {ErrorMessage}", e.ToString());
+                return null;  
             }
         }
 
 
-        public async Task<bool> Delete(int id)
+
+
+
+        public async Task<bool> DeleteBooking(int id)
         {
             try
             {
+                if (id <= 0)
+                {
+                    _logger.LogError("[BookingRepository] Invalid BookingId provided for deletion: {BookingId}", id);
+                    return false;
+                }
                 var booking = await _db.Bookings.FindAsync(id);
                 if (booking == null)
                 {
                     _logger.LogError("[BookingRepository] booking not found for the BookingId {BookingId:0000}", id);
                     return false;
-                }
-                var item = await _db.Items.FindAsync(booking.Items?.ItemId);
-                item.IsBooked = false;
-                await _db.SaveChangesAsync();
+                }                
                 _db.Bookings.Remove(booking);
                 await _db.SaveChangesAsync();
                 return true;

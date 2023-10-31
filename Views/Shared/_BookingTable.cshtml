@@ -5,6 +5,12 @@
         {
             <div class="container bg-light">
             <p class="text-primary">Booking @booking.BookingId</p>
+            @{
+                DateTime startDate = (DateTime)booking.StartDate;
+                string formattedStartDate = startDate.ToShortDateString();
+                DateTime endDate = (DateTime)booking.EndDate;
+                string formattedEndDate = endDate.ToShortDateString();
+            }
             <table class="table table-striped">
                 <tr>
                     <th>HousseNr</th>
@@ -21,20 +27,14 @@
                     <td>@(booking.Items?.Location ?? "No Location")</td>
                     <td>@booking.Customer.CustomerId</td>
                     <td>@booking.Customer.Name</td>
-                    <td>@booking.BookingDate</td>
-                    @{
-                        DateTime startDate = (DateTime)booking.StartDate;
-                        string formattedStartDate = startDate.ToShortDateString();
-                        DateTime endDate = (DateTime)booking.EndDate;
-                        string formattedEndDate = endDate.ToShortDateString();
-                    }
+                    <td>@booking.BookingDate</td>                    
                     <td>@formattedStartDate</td>
                     <td>@formattedEndDate</td>
                     <td>
                         <p>
                             <a class="btn btn-outline-danger" asp-route-id="@booking.BookingId"
                                asp-controller="Booking"
-                               asp-action="Delete">Delete this Booking</a>
+                               asp-action="DeleteBooking">Delete this Booking</a>
                         </p>
 
                     </td>

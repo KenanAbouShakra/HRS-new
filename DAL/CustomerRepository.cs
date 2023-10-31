@@ -65,17 +65,8 @@ namespace HouseRenting.DAL
 
                 var bookings = await _db.Bookings.Where(b => b.CustomerId == customer.CustomerId).ToListAsync();
 
-                foreach (var booking in bookings)
-                {
-                    var item = await _db.Items.FindAsync(booking.ItemId);
-
-                    if (item != null)
-                    {
-                        item.IsBooked = false;
-                    }
-                    _db.Customers.RemoveRange(bookings.Select(b => b.Customer));
-                }
-
+               _db.Customers.RemoveRange(bookings.Select(b => b.Customer));
+                
                 _db.Customers.RemoveRange(customer);
                 await _db.SaveChangesAsync();
                 return true;
@@ -91,17 +82,17 @@ namespace HouseRenting.DAL
             try
             {               
                 var bookings = await _db.Bookings.ToListAsync();
+                var items= await _db.Items.ToListAsync();
 
-                foreach (var booking in bookings)
+                foreach (var item in items)
                 {
-                    var item = await _db.Items.FindAsync(booking.ItemId);
-
                     if (item != null)
                     {
                         item.IsBooked = false;
                     }
                     
                 }
+                _db.Bookings.RemoveRange(bookings);
 
                 _db.Customers.RemoveRange(_db.Customers);
                 await _db.SaveChangesAsync();

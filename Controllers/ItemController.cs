@@ -56,45 +56,63 @@ namespace HouseRenting.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            return View();
+            var viewModel = new ItemImagesViewModel
+            {
+                Item = new Item(),                
+            };
+
+            return View(viewModel);
         }
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create(Item item)
+        public async Task<IActionResult> Create(ItemImagesViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                bool Ok = await _itemRepository.Create(item);
-                if (Ok)
+                bool Ok = await _itemRepository.Create(viewModel);
+                if (Ok) { 
                     return RedirectToAction(nameof(Table));
+                }
             }
-            _logger.LogWarning("[ItemController] Item creation failed {@item}", item);
-            return View(item);
+            _logger.LogWarning("[ItemController] Item creation failed {@viewModel}", viewModel);
+            return View(viewModel);
         }
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id)
         {
             var item = await _itemRepository.GetItemById(id);
-            if (item == null) 
+
+            if (item == null)
             {
                 _logger.LogError("[ItemController] Item not found when updating the ItemId {ItemId:0000}", id);
                 return BadRequest("Item not found for the ItemId");
             }
-            return View(item);
+
+            var viewModel = new ItemImagesViewModel
+            {
+                Item = item,
+            };
+
+            return View(viewModel);
         }
+
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Update(Item item)
+        public async Task<IActionResult> Update(ItemImagesViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                bool Ok = await _itemRepository.Update(item);
-                if (Ok)
+                bool isSuccess = await _itemRepository.Update(viewModel);
+
+                if (isSuccess)
+                {
                     return RedirectToAction(nameof(Table));
+                }
             }
-            _logger.LogWarning("[ItemController] Item update failed {@item}", item);
-            return View(item);
+
+            _logger.LogWarning("[ItemController] Item update failed {@viewModel}", viewModel);
+            return View(viewModel);
         }
         [HttpGet]
         [Authorize(Roles = "Admin")]

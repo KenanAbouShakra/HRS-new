@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using HouseRenting.Models;
+using HouseRenting.ViewModels;
 
 namespace HouseRenting.DAL
 {
@@ -38,35 +39,54 @@ namespace HouseRenting.DAL
             }
             
         }
-        public async Task<bool> Create(Item item)
+        public async Task<bool> Create(ItemImagesViewModel viewModel)
         {
             try
             {
+                var item = viewModel.Item;
+                var images = viewModel.Images;
                 _db.Items.Add(item);
                 await _db.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("[ItemRepository] item creation failed for item {@item}, error message: {e}", item, e.Message);
-                return false;
-            }
-        }
-      
-        public async Task<bool> Update(Item item)
-        {
-            try
-            {
-                _db.Items.Update(item);
+                foreach (var image in images)
+                {
+                    image.ItemId = item.ItemId;
+                    _db.Images.Add(image);
+                }
                 await _db.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
             {
-                _logger.LogError("[ItemRepository] item FindAsync(id) failed when updating the ItemId {ItemId:0000}, error message: {e}", item, e.Message);
+                _logger.LogError("[ItemRepository] item creation failed for item {@viewModel}, error message: {e}", viewModel, e.Message);
                 return false;
             }
         }
+
+        public async Task<bool> Update(ItemImagesViewModel viewModel)
+        {
+
+            try
+            {
+                _db.Items.Attach(viewModel.Item);
+                _db.Entry(viewModel.Item).State = EntityState.Modified;                
+                _db.Images.RemoveRange(_db.Images.Where(img => img.ItemId == viewModel.Item.ItemId));                
+                foreach (var image in viewModel.Images)
+                {
+                    image.ItemId = viewModel.Item.ItemId;
+                    _db.Images.Add(image);
+                }
+
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("[ItemRepository] Item update failed for ItemId {ItemId:0000}, error message: {e}", viewModel.Item.ItemId, e.Message);
+                
+                return false;
+            }
+        }
+
         public async Task<bool> Delete(int id)
         {
             try
